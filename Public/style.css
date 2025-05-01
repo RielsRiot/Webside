@@ -20,6 +20,8 @@ body, [theme="green"] {
 }
 
 body {
+    --transitions: 200ms ease-out;
+
     max-width: 1200px;
     margin: auto;
 
@@ -27,6 +29,7 @@ body {
     background-size: cover;
 
     font-family: Roboto;
+    overflow-x: hidden;
 }
 
 body {
@@ -215,6 +218,7 @@ img {
     background-color: var(--background);
     border: var(--accent) solid var(--borders);
     border-radius: 1000px;
+    transition: var(--transitions);
 }
 
 .bottom-notch > * {
@@ -236,6 +240,7 @@ img {
     top: calc(var(--size)/-2);
 
     text-align: center;
+    transition: var(--transitions), font-size 0s;
 }
 
 .notch-bubble::before {
@@ -254,6 +259,14 @@ img {
     content: "🢁";
 }
 
+.bottom-notch:hover {
+    font-size: 1.5rem;
+}
+
+.bottom-notch:hover > .notch-bubble {
+    --size: 75px;
+}
+
 .has-bubble-right {
     --size: 50px;
     margin-right: calc(var(--size)/2);
@@ -267,15 +280,11 @@ img {
     margin: 0;
 }
 
-
 .has-bubble-right:not(:has(> img)) {
     padding-right: calc(var(--pad) + var(--size)/2);
 }
 
 .bubble-right {
-    line-height: 200%;
-
-    text-align: center;
     background-color: var(--background);
     border-radius: 50%;
     border: solid var(--accent) var(--borders);
@@ -285,10 +294,20 @@ img {
     position: absolute;
     right: calc(var(--size)/-2 - var(--borders)/2);
     top: calc(50% - var(--size)/2);
+    transition: var(--transitions);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .bubble-right::after {
     content: "🢂";
+}
+
+.bubble-right:hover {
+    --size: 75px;
+    font-size: 2rem;
 }
 
 .no-last-margin > :last-child {
