@@ -1,3 +1,14 @@
+* {
+    box-sizing: border-box;
+    min-width: fit-content;
+    min-height: fit-content;
+}
+
+:root, html, body {
+    margin: 0;
+    height: 100%;
+}
+
 body {
-    background-color: aliceblue;
+    padding: 10px;
 }
