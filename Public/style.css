@@ -1,7 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
 * {
     box-sizing: border-box;
-    min-width: fit-content;
-    min-height: fit-content;
 }
 
 :root, html, body {
@@ -9,6 +9,265 @@
     height: 100%;
 }
 
+body, [theme="green"] {
+    --background: lightgreen;
+    --foreground: black;
+    --accent: green;
+    --border-radius: 50px;
+    --gap: 10px;
+    --pad: 10px;
+    --borders: 10px;
+}
+
 body {
-    padding: 10px;
+    padding: var(--gap);
+
+    background-image: url(bg.jpg);
+    background-size: cover;
+
+    font-family: Roboto;
+}
+
+body {
+    color: var(--foreground);
+}
+
+#main-grid {
+    display: grid;
+    grid-template-areas:
+        "menu about"
+        "menu latest"
+        "footer footer"
+    ;
+
+    grid-template-columns: 350px 1fr;
+    grid-template-rows: 200px calc(100% - 450px - var(--gap)*2) 250px;
+    gap: var(--gap);
+
+    width: 100%;
+    height: 100%;
+}
+
+#menu {
+    grid-area: menu;
+}
+
+#about {
+    grid-area: about;
+}
+
+#latest {
+    grid-area: latest;
+}
+
+#footer {
+    grid-area: footer;
+}
+
+.flex-vertical {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.flex-horizontal {
+    display: flex;
+    flex-direction: row;
+}
+
+.even {
+    justify-content: space-between;
+}
+
+.grow {
+    flex-grow: 1;
+}
+
+.cover {
+    object-fit: cover;
+}
+
+.full {
+    width: 100%;
+    height: 100%;
+}
+
+.round {
+    border-radius: 50%;
+}
+
+.item {
+    position: relative;
+    background: var(--background);
+
+    border: solid var(--accent) var(--borders);
+    border-radius: var(--border-radius);
+}
+
+.center {
+    text-align: center;
+}
+
+.em2 {
+    font-size: 2em;
+}
+
+.hanger {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top: none;
+
+    width: calc(100% - var(--border-radius));
+    height: 100%;
+    margin: auto;
+
+    position: relative;
+    top: calc(var(--borders) * -1);
+}
+
+.item > img.full {
+    border-radius: calc(var(--border-radius) - var(--borders));
+}
+
+.pad {
+    padding: calc(var(--pad)*2) var(--pad);
+}
+
+.gap {
+    gap: var(--gap);
+}
+
+.has-bubble-top {
+    --size: 120px;
+    --gap: 5px;
+
+    position: relative;
+    margin-top: calc(var(--size)/2 - var(--borders)/2);
+
+    mask-clip: no-clip;
+    mask-image: radial-gradient(
+        circle at 50% var(--gap),
+        black calc(var(--size)/2 - 1px),
+        transparent calc(var(--size)/2),
+        transparent calc(var(--size)/2 + var(--gap)),
+        black calc(var(--size)/2 + var(--gap) + 1px)
+    );
+
+    padding-top: calc(var(--pad) + var(--size)/2 + var(--borders));
+}
+
+.bubble-top {
+    border: var(--borders) solid var(--accent);
+    border-radius: 50%;
+
+    width: var(--size);
+    height: var(--size);
+
+    background: var(--background);
+    position: absolute;
+    left: calc(50% - var(--size)/2);
+    top: calc((var(--borders)/2 + var(--size)/2) * -1);
+}
+
+.bubble-top::before {
+    content: "";
+    position: absolute;
+    width: calc(var(--size) + (var(--borders) + var(--gap))*2);
+    height: calc(var(--size) + (var(--borders) + var(--gap))*2);
+
+    border: calc(var(--borders)) solid var(--accent);
+    border-radius: inherit;
+    box-sizing: border-box;
+    clip-path: inset(calc(var(--size)/2 + var(--borders)/2 + var(--gap)) 0px 0px 0px);
+    left: calc(var(--borders) * -2 - var(--gap));
+    top: calc(var(--borders) * -2 - var(--gap));
+}
+
+.bottom-notch-container {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 200px;
+    bottom: calc(var(--borders)/-2 - 100px);
+
+    display: flex;
+    flex-direction: row;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.bottom-notch {
+    position: relative;
+
+    padding: var(--pad);
+    background-color: var(--background);
+    border: var(--accent) solid var(--borders);
+    border-radius: 1000px;
+}
+
+.bottom-notch > * {
+    position: relative;
+}
+
+.notch-bubble {
+    --size: 60px;
+
+    position: absolute;
+    background-color: var(--background);
+    border: var(--accent) solid var(--borders);
+    border-radius: 50%;
+
+    height: var(--size);
+    width: var(--size);
+
+    left: calc(50% - var(--size)/2);
+    top: calc(var(--size)/-2);
+
+    text-align: center;
+}
+
+.notch-bubble::before {
+    content: "";
+    position: absolute;
+    box-sizing: border-box;
+    background-color: var(--background);
+    
+    left: calc(var(--borders) * -1);
+    right: calc(var(--borders) * -1);
+    bottom: calc(var(--borders) * -1);
+    top: calc(50%);
+}
+
+.notch-bubble::after {
+    content: "🢁";
+}
+
+.has-bubble-right {
+    --size: 50px;
+    margin-right: calc(var(--size)/2);
+}
+
+.bubble-right {
+    line-height: 200%;
+
+    text-align: center;
+    background-color: var(--background);
+    border-radius: 50%;
+    border: solid var(--accent) var(--borders);
+    width: var(--size);
+    height: var(--size);
+
+    position: absolute;
+    right: calc(var(--size)/-2 - var(--borders)/2);
+    top: calc(50% - var(--size)/2);
+}
+
+.bubble-right::after {
+    content: "🢂";
+}
+
+.basis-350 {
+    flex-basis: 350px;
+    min-width: 350px;
 }
