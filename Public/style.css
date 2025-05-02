@@ -38,6 +38,8 @@ body {
     font-size: larger;
 
     overflow-x: hidden;
+    min-height: max-content;
+    padding: 30px;
 }
 
 body {
@@ -49,7 +51,6 @@ img {
 }
 
 #main-grid {
-    padding: 30px;
     display: grid;
     grid-template-areas:
         "menu about about"
@@ -59,7 +60,7 @@ img {
     ;
 
     grid-template-columns: 260px 150px 1fr;
-    grid-template-rows: 220px auto minmax(300px, 1fr) 250px;
+    grid-template-rows: 220px max-content minmax(300px, 1fr) 250px;
     gap: var(--gap);
 
     width: 100%;
@@ -361,7 +362,7 @@ a:hover > wavy {
         ;
         
         grid-template-columns: 300px 1fr;
-        grid-template-rows: 220px auto 1fr 250px 250px;
+        grid-template-rows: 220px max-content 1fr 250px 250px;
         height: calc(100% + 250px + var(--gap));
     }
 }
@@ -377,7 +378,7 @@ a:hover > wavy {
         ;
         
         grid-template-columns: 1fr;
-        grid-template-rows: 200px auto 400px 200px 700px;
+        grid-template-rows: 200px max-content 400px 200px 700px;
         height: initial;
     }
 
