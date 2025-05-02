@@ -59,7 +59,7 @@ img {
     ;
 
     grid-template-columns: 260px 150px 1fr;
-    grid-template-rows: 220px 250px 1fr 250px;
+    grid-template-rows: 220px auto minmax(300px, 1fr) 250px;
     gap: var(--gap);
 
     width: 100%;
@@ -133,6 +133,10 @@ img {
 
 .em2 {
     font-size: 2rem;
+}
+
+.em3 {
+    font-size: 3rem;
 }
 
 .hanger {
@@ -341,7 +345,6 @@ a:hover > wavy {
     margin: auto;
     width: fit-content;
     position: relative;
-    left: -0.5rem;
 }
 
 .justify {
@@ -358,13 +361,13 @@ a:hover > wavy {
             "footer footer"
         ;
         
-        grid-template-columns: 260px 1fr;
-        grid-template-rows: 220px 100px 1fr 250px 250px;
+        grid-template-columns: 300px 1fr;
+        grid-template-rows: 220px auto 1fr 250px 250px;
         height: calc(100% + 250px + var(--gap));
     }
 }
 
-@media (width <= 700px) {
+@media (width <= 800px) {
     #main-grid {
         grid-template-areas:
             "about"
@@ -375,7 +378,7 @@ a:hover > wavy {
         ;
         
         grid-template-columns: 1fr;
-        grid-template-rows: 200px 330px 400px 200px 700px;
+        grid-template-rows: 200px auto 400px 200px 700px;
         height: initial;
     }
 
