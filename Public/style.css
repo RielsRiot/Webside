@@ -413,15 +413,15 @@ a:hover > wavy {
 @media (width <= 800px) {
     #main-grid {
         grid-template-areas:
-            "about"
             "menu"
+            "about"
             "latest"
             "big-footer"
             "footer"
         ;
         
         grid-template-columns: 1fr;
-        grid-template-rows: 200px max-content 400px 200px 700px;
+        grid-template-rows: max-content 200px 400px 200px 700px;
         height: initial;
     }
 

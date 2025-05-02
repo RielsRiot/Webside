@@ -1,0 +1,23 @@
+favicon
+pages
+- main
+    - replace background to own drawing
+    - fill in real text
+    - leaf is an emoji, will render differently
+- dino facts
+    - create
+- commissions
+    - create
+- my ocs
+    - create
+- social medias
+    - create
+
+create a github actions node.js build system
+- posts
+- art
+- compile code
+    - css
+    - js/ts (esbuild)
+
+create github pages
