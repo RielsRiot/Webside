@@ -13,8 +13,20 @@ webp.grant_permission();
 const buildPath = path.join( __dirname, "./../Build" );
 const publicPath = path.join( __dirname, "./../Public" );
 
-const imageSizes = [120, 240, 480, 900];
 let imageOriginalWidths = {};
+let optimalImages = {};
+
+function addImage ( path, width ) {
+    if ( imageOriginalWidths[path] <= width )
+        return false;
+
+    if ( optimalImages[path] == undefined ) {
+        optimalImages[path] = {};
+    }
+
+    optimalImages[path][width] = true;
+    return true;
+}
 
 fsSync.rmSync( buildPath, { recursive: true, force: true } );
 
@@ -70,14 +82,7 @@ async function process ( shard ) {
 
             let size = imageSize.imageSize( await fs.readFileAsync( from ) );
             imageOriginalWidths[to] = size.width;
-            let tasks = [webp.cwebp( from, to )];
-            imageSizes.forEach( w => {
-                if ( size.width > w ) {
-                    tasks.push( webp.cwebp( from, replaceExtension(to, '.'+w+'px.webp'), "-resize "+w+" 0" ) );
-                }
-            });
-
-            await Promise.all( tasks );
+            await webp.cwebp( from, to );
             log( '✔️ ', from, '->', to );
             return;
 
@@ -112,21 +117,13 @@ async function process ( shard ) {
                     let name = x.getAttribute( 'src' );
                     if ( !x.hasAttribute('sizes') ) {
                         errors.push( `[image has no "sizes" attribute] ${name} @ ${to}` );
+                        return;
                     }
 
-                    let sizes = [];
-                    imageSizes.forEach( w => {
-                        let size = replaceExtension(name, '.'+w+'px.webp');
-                        if ( fsSync.existsSync( path.join( to, '..', size ) ) ) {
-                            sizes.push( size + ' ' + w + 'w' );
-                        }
-                    });
-
-                    if ( sizes.length != 0 ) {
-                        sizes.push( name + ' ' + imageOriginalWidths[path.join(to, '..', name)] + 'w' );
-                        x.setAttribute( 'srcset', sizes.join( ', ' ) );
-                        x.removeAttribute('src');
-                    }
+                    var src = path.join( to, '..', name );
+                    let sizes = x.getAttribute( 'sizes' ).split( ',' ).map( x => Array.from(x.matchAll( /\d+/g )).pop()[0] ).filter( x => addImage( src, x ) ).map( x => replaceExtension(name, `.${x}px.webp`) + ' ' + x + 'w' );
+                    sizes.push( name + ' ' + imageOriginalWidths[src] + 'w' );
+                    x.setAttribute( 'srcset', sizes.join(', ') );
                 } );
 
                 await fs.writeFileAsync( to, html.minify( Buffer.from(inner.toString()), {} ) );
@@ -177,8 +174,25 @@ async function processDependencies () {
     }
 }
 
+async function processOptimalImages () {
+    var tasks = [];
+
+    for ( let img in optimalImages ) {
+        for ( let size in optimalImages[img] ) {
+            let to = replaceExtension(img, '.'+size+'px.webp');
+            log( '⚒️ ', img, '->', to );
+            tasks.push( webp.cwebp( img, to, "-resize "+size+" 0" ).then( () => {
+                log( '✔️ ', img, '->', to );
+            } ) );
+        }
+    }
+
+    await Promise.all( tasks );
+}
+
 process( '' ).then( async () => {
     await processDependencies();
+    await processOptimalImages();
 
     if ( errors.length != 0 ) {
         log( 'Errors:\n\t' + errors.join( '\n\t' ) );
