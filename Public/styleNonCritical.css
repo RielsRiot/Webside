@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+
+body {
+    font-family: "Patrick Hand", cursive;
+}
+
+.bottom-notch:hover {
+    font-size: 1.5rem;
+}
+
+.bottom-notch:hover > .notch-bubble {
+    --size: 75px;
+}
+
+.bubble-right:hover {
+    --size: 75px;
+    font-size: 2rem;
+}
+
+a:hover > wavy {
+    text-decoration-color: var(--accent-inverse);
+}

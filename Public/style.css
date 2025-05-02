@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
-
 * {
     box-sizing: border-box;
     min-height: 0;
@@ -31,7 +29,6 @@ body {
     background-image: url(bg.jpg);
     background-size: cover;
 
-    font-family: "Patrick Hand", cursive;
     letter-spacing: 1px;
     font-weight: 400;
     font-style: normal;
@@ -282,14 +279,6 @@ img {
     z-index: 1;
 }
 
-.bottom-notch:hover {
-    font-size: 1.5rem;
-}
-
-.bottom-notch:hover > .notch-bubble {
-    --size: 75px;
-}
-
 .has-bubble-right {
     --size: 50px;
     margin-right: calc(var(--size)/2);
@@ -297,10 +286,6 @@ img {
 
 .bubble-right-margin {
     margin-right: 25px;
-}
-
-.no-margin {
-    margin: 0;
 }
 
 .has-bubble-right:not(:has(> img)) {
@@ -324,21 +309,17 @@ img {
     align-items: center;
 }
 
-.bubble-right:hover {
-    --size: 75px;
-    font-size: 2rem;
-}
-
 .no-last-margin > :last-child {
     margin: 0;
 }
 
-wavy {
-    text-decoration: wavy underline var(--accent);
+a {
+    text-decoration: none;
+    color: initial;
 }
 
-a:hover > wavy {
-    text-decoration-color: var(--accent-inverse);
+wavy {
+    text-decoration: wavy underline var(--accent);
 }
 
 .clip {

@@ -16,8 +16,15 @@ pages
 create a github actions node.js build system
 - posts
 - art
-- compile code
-    - css
-    - js/ts (esbuild)
 
 create github pages
+
+perf
+- images
+    - convert to webP
+    - thumbnail sizes
+- minify code
+    - html
+    - css
+    - js/ts (esbuild)
+- make a minified fontawesome bundle
