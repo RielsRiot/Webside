@@ -144,6 +144,7 @@ img {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     border-top: none;
+    clip-path: inset(0 0 0 0);
 
     width: calc(100% - var(--border-radius));
     height: 100%;
@@ -209,6 +210,13 @@ img {
     clip-path: inset(calc(var(--size)/2 + var(--borders)/2 + var(--gap)) 0px 0px 0px);
     left: calc(var(--borders) * -2 - var(--gap));
     top: calc(var(--borders) * -2 - var(--gap));
+
+    --border-width: 56px;
+
+    border-image: url(border-10-56.png);
+    border-image-slice: 56;
+    border-image-width: 70px;
+    border-image-repeat: round;
 }
 
 .bottom-notch-container {
@@ -266,7 +274,7 @@ img {
     left: calc(var(--borders) * -1);
     right: calc(var(--borders) * -1);
     bottom: calc(var(--borders) * -1);
-    top: calc(50%);
+    top: calc(50% - 3px);
 }
 
 .notch-bubble > .inner {
@@ -349,6 +357,41 @@ a:hover > wavy {
 
 .fa-solid {
     color: var(--accent);
+}
+
+.drawn-border {
+    --border-width: 50px;
+
+    border-image: url(border-10-48.png);
+    border-image-slice: 50;
+    border-image-width: 50px;
+    border-image-repeat: round;
+}
+
+.drawn-border-23, .drawn-border-23-grow {
+    --border-width: 23px;
+
+    border-image: url(border-10-23.png);
+    border-image-slice: 23;
+    border-image-width: 23px;
+    border-image-repeat: round;
+}
+
+.drawn-border-23-grow {
+    border-image-width: calc(23px + var(--size)/50*5);
+}
+
+.drawn-border-56 {
+    --border-width: 56px;
+
+    border-image: url(border-10-56.png);
+    border-image-slice: 56;
+    border-image-width: 56px;
+    border-image-repeat: round;
+}
+
+.hanger {
+    border-image-outset: var(--border-width) 0 0 0;
 }
 
 @media (width <= 1090px) {
