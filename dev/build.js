@@ -20,10 +20,21 @@ fsSync.rmSync( buildPath, { recursive: true, force: true } );
 
 let errors = [];
 let withDependencies = [];
-function addDependentFile ( from, to, dependencies, build ) {
+function addDependentFile ( from, to, dependencies, build, dependencyHints ) {
+    log( '🕒', from, '->', to, '['+[...dependencies, ...dependencyHints].join(', ')+']' );
     withDependencies.push( {
         from, to, dependencies, build
     } );
+}
+
+function log ( ...args ) {
+    console.log( ...args.map( x => {
+        if ( typeof x === 'string' ) {
+            return x.replaceAll( buildPath, 'Build' ).replaceAll( publicPath, 'Public' );
+        }
+
+        return x;
+    } ) );
 }
 
 function getExtension ( shard ) {
@@ -41,12 +52,12 @@ async function process ( shard ) {
 
     let stat = await fs.statAsync( from );
     if ( stat.isDirectory() ) {
-        console.log( '⏳', from, '->', to );
+        log( '⏳', from, '->', to );
         await fs.mkdirAsync( to );
         let list = await fs.readdirAsync( from );
         list = list.map( next => process( path.join( shard, next ) ) );
         await Promise.all( list );
-        console.log( '✔️ ', from, '->', to );
+        log( '✔️ ', from, '->', to );
         return;
     }
 
@@ -55,7 +66,7 @@ async function process ( shard ) {
         case '.png':
         case '.jpg': // 120w, 480w, 1080w, original
             to = replaceExtension( to, '.webp' );
-            console.log( '⏳', from, '->', to );
+            log( '⏳', from, '->', to );
 
             let size = imageSize.imageSize( await fs.readFileAsync( from ) );
             imageOriginalWidths[to] = size.width;
@@ -67,11 +78,11 @@ async function process ( shard ) {
             });
 
             await Promise.all( tasks );
-            console.log( '✔️ ', from, '->', to );
+            log( '✔️ ', from, '->', to );
             return;
 
         case '.js':
-            console.log( '⏳', from, '->', to );
+            log( '⏳', from, '->', to );
             await esbuild.build( {
                 entryPoints: [from],
                 outfile: to,
@@ -80,17 +91,16 @@ async function process ( shard ) {
             break;
 
         case '.css':
-            console.log( '⏳', from, '->', to );
+            log( '⏳', from, '->', to );
             await fs.writeFileAsync( to, await css( await fs.readFileAsync( from ) ) );
             break;
 
         case '.html':
-            console.log( '⏳', from, '->', to );
             let data = await fs.readFileAsync( from );
             let inner = htmlParser.parse( data );
             let deps = inner.querySelectorAll( '[inline]' );
             addDependentFile( from, to, deps.map( x => x.getAttribute('href') ), async (resolved) => {
-                console.log( '⚒️', from, '->', to );
+                log( '⚒️ ', from, '->', to );
                 for ( let i = 0; i < deps.length; i++ ) {
                     let name = deps[i].getAttribute( 'href' );
                     let value = resolved[name];
@@ -120,8 +130,8 @@ async function process ( shard ) {
                 } );
 
                 await fs.writeFileAsync( to, html.minify( Buffer.from(inner.toString()), {} ) );
-                console.log( '✔️ ', from, '->', to );
-            } );
+                log( '✔️ ', from, '->', to );
+            }, ['images'] );
 
             return;
 
@@ -131,7 +141,7 @@ async function process ( shard ) {
             return;
     }
 
-    console.log( '✔️ ', from, '->', to );
+    log( '✔️ ', from, '->', to );
 }
 
 async function processDependencies () {
@@ -171,6 +181,6 @@ process( '' ).then( async () => {
     await processDependencies();
 
     if ( errors.length != 0 ) {
-        console.error( 'Errors:\n\t' + errors.join( '\n\t' ) );
+        log( 'Errors:\n\t' + errors.join( '\n\t' ) );
     }
 } );
