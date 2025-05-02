@@ -213,7 +213,7 @@ img {
 
     --border-width: 56px;
 
-    border-image: url(border-10-56.png);
+    border-image: url(borders/10-56.png);
     border-image-slice: 56;
     border-image-width: 70px;
     border-image-repeat: round;
@@ -362,7 +362,7 @@ a:hover > wavy {
 .drawn-border {
     --border-width: 50px;
 
-    border-image: url(border-10-48.png);
+    border-image: url(borders/10-48.png);
     border-image-slice: 50;
     border-image-width: 50px;
     border-image-repeat: round;
@@ -371,7 +371,7 @@ a:hover > wavy {
 .drawn-border-23, .drawn-border-23-grow {
     --border-width: 23px;
 
-    border-image: url(border-10-23.png);
+    border-image: url(borders/10-23.png);
     border-image-slice: 23;
     border-image-width: 23px;
     border-image-repeat: round;
@@ -384,7 +384,7 @@ a:hover > wavy {
 .drawn-border-56 {
     --border-width: 56px;
 
-    border-image: url(border-10-56.png);
+    border-image: url(borders/10-56.png);
     border-image-slice: 56;
     border-image-width: 56px;
     border-image-repeat: round;
