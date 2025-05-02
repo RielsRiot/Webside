@@ -268,8 +268,7 @@ img {
     top: calc(50%);
 }
 
-.notch-bubble::after {
-    content: "🢁";
+.notch-bubble > .inner {
     position: relative;
     z-index: 1;
 }
@@ -316,10 +315,6 @@ img {
     align-items: center;
 }
 
-.bubble-right::after {
-    content: "🢂";
-}
-
 .bubble-right:hover {
     --size: 75px;
     font-size: 2rem;
@@ -349,6 +344,10 @@ a:hover > wavy {
 
 .justify {
     text-align: justify;
+}
+
+.fa-solid {
+    color: var(--accent);
 }
 
 @media (width <= 1090px) {
