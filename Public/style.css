@@ -26,7 +26,7 @@ body {
     max-width: 1200px;
     margin: auto;
 
-    background-image: url(bg.jpg);
+    background-image: url(assets/bg.jpg);
     background-size: cover;
 
     letter-spacing: 1px;
