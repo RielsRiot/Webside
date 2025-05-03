@@ -3,7 +3,7 @@ const fsSync = require( 'fs' );
 const fs = require( 'libfsasync' );
 const path = require( 'path' );
 const esbuild = require( 'esbuild' );
-const css = require( 'css-minify' );
+const css = require( 'css-tree' );
 const html = require( '@minify-html/node' );
 const htmlParser = require( 'node-html-parser' );
 const imageSize = require( 'image-size' );
@@ -77,7 +77,7 @@ async function process ( shard ) {
     let extension = getExtension( shard );
     switch ( extension ) {
         case '.png':
-        case '.jpg': // 120w, 480w, 1080w, original
+        case '.jpg':
             to = replaceExtension( to, '.webp' );
             log( '⏳', from, '->', to );
 
@@ -99,7 +99,15 @@ async function process ( shard ) {
 
         case '.css':
             log( '⏳', from, '->', to );
-            await fs.writeFileAsync( to, await css( await fs.readFileAsync( from ) ) );
+            let parsed = css.parse( (await fs.readFileAsync( from )).toString() );
+            css.walk( parsed, (node) => {
+                if ( node.type != 'Url' )
+                    return;
+
+                if ( ['.jpg', '.png'].includes( getExtension( node.value ) ) )
+                    node.value = replaceExtension( node.value, '.webp' );
+            } );
+            await fs.writeFileAsync( to, css.generate( parsed, { sourceMap: false } ) );
             break;
 
         case '.html':
@@ -116,7 +124,7 @@ async function process ( shard ) {
                 }
 
                 inner.querySelectorAll( 'img' ).forEach( x => {
-                    let name = x.getAttribute( 'src' );
+                    let name = replaceExtension(x.getAttribute( 'src' ), '.webp');
                     if ( !x.hasAttribute('sizes') ) {
                         errors.push( `[image has no "sizes" attribute] ${name} @ ${to}` );
                         return;

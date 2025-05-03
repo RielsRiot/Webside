@@ -26,7 +26,7 @@ body {
     max-width: 1200px;
     margin: auto;
 
-    background-image: url(bg.webp);
+    background-image: url(bg.jpg);
     background-size: cover;
 
     letter-spacing: 1px;
@@ -210,7 +210,7 @@ img {
 
     --border-width: 56px;
 
-    border-image: url(borders/10-56.webp);
+    border-image: url(borders/10-56.png);
     border-image-slice: 56;
     border-image-width: 70px;
     border-image-repeat: round;
@@ -343,7 +343,7 @@ wavy {
 .drawn-border {
     --border-width: 50px;
 
-    border-image: url(borders/10-48.webp);
+    border-image: url(borders/10-48.png);
     border-image-slice: 50;
     border-image-width: 50px;
     border-image-repeat: round;
@@ -352,7 +352,7 @@ wavy {
 .drawn-border-23, .drawn-border-23-grow {
     --border-width: 23px;
 
-    border-image: url(borders/10-23.webp);
+    border-image: url(borders/10-23.png);
     border-image-slice: 23;
     border-image-width: 23px;
     border-image-repeat: round;
@@ -365,7 +365,7 @@ wavy {
 .drawn-border-56 {
     --border-width: 56px;
 
-    border-image: url(borders/10-56.webp);
+    border-image: url(borders/10-56.png);
     border-image-slice: 56;
     border-image-width: 56px;
     border-image-repeat: round;
