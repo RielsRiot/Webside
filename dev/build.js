@@ -14,6 +14,7 @@ const buildPath = path.join( __dirname, "./../Build" );
 const publicPath = path.join( __dirname, "./../Public" );
 
 let imageOriginalWidths = {};
+let imageOriginalHeights = {};
 let optimalImages = {};
 
 function addImage ( path, width ) {
@@ -82,6 +83,7 @@ async function process ( shard ) {
 
             let size = imageSize.imageSize( await fs.readFileAsync( from ) );
             imageOriginalWidths[to] = size.width;
+            imageOriginalHeights[to] = size.height;
             await webp.cwebp( from, to );
             log( '✔️ ', from, '->', to );
             return;
@@ -121,7 +123,8 @@ async function process ( shard ) {
                     }
 
                     var src = path.join( to, '..', name );
-                    let sizes = x.getAttribute( 'sizes' ).split( ',' ).map( x => Array.from(x.matchAll( /\d+/g )).pop()[0] ).filter( x => addImage( src, x ) ).map( x => replaceExtension(name, `.${x}px.webp`) + ' ' + x + 'w' );
+                    let sizes = x.getAttribute( 'sizes' ).split( ',' ).map( x => x.match( /\d+x\d+/g )[0] ).filter( x => addImage( src, x ) ).map( x => replaceExtension(name, `.${x}px.webp`) + ' ' + x.split('x')[0] + 'w' );
+                    x.setAttribute( 'sizes', x.getAttribute( 'sizes' ).replaceAll( /(\d+)x\d+/g, '$1px' ) )
                     sizes.push( name + ' ' + imageOriginalWidths[src] + 'w' );
                     x.setAttribute( 'srcset', sizes.join(', ') );
                 } );
@@ -181,7 +184,28 @@ async function processOptimalImages () {
         for ( let size in optimalImages[img] ) {
             let to = replaceExtension(img, '.'+size+'px.webp');
             log( '⚒️ ', img, '->', to );
-            tasks.push( webp.cwebp( img, to, "-resize "+size+" 0" ).then( () => {
+
+            let originalWidth = imageOriginalWidths[img];
+            let originalHeight = imageOriginalHeights[img];
+            let originalRatio = originalWidth / originalHeight;
+
+            let displayWidth = parseInt(size.split('x')[0]);
+            let displayHeight = parseInt(size.split('x')[1]);
+            let displayRatio = displayWidth / displayHeight;
+            
+            // assuming cover mode
+            let scale = 1;
+            if ( originalRatio > displayRatio ) { // image is wider, adjust height to match
+                scale = displayHeight / originalHeight;
+            }
+            else { // image is taller, adjust width to match
+                scale = displayWidth / originalWidth;
+            }
+
+            let width = Math.ceil(originalWidth * scale);
+            let height = Math.ceil(originalHeight * scale);
+
+            tasks.push( webp.cwebp( img, to, "-resize "+width+" "+height ).then( () => {
                 log( '✔️ ', img, '->', to );
             } ) );
         }
